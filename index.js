@@ -1,9 +1,4 @@
 const UssdMenu = require('ussd-menu-builder');
-const ussdFootball = require('ussdFootballApi');
-const LEAGUE_ID_PREMIERSHIP_LEAGUE=2;
-const LEAGUE_ID_LALIGA =11;
-const LEAGUE_ID_SERIES_A=6;
-const LEAGUE_ID_CHAMPIONSHIP=3;
 // https://www.npmjs.com/package/ussd-menu-builder
 exports.handler = (event, context, callback) => {
     
@@ -23,7 +18,7 @@ let args = {
                 '\n1. Live Score' +
                 '\n2. Premiership (EPL)' +
                 '\n3. La Liga' +
-                '\n4. Serie A' +
+                '\n4.Serie A' +
                 '\n0. Exit');
         },
         // next object links to next state based on user input
@@ -43,7 +38,7 @@ let args = {
     menu.state('live_score', {
         run: () => {
             // use menu.con() to send response without terminating session      
-            menu.con('Live scores  \n' + 
+            menu.con('Live scores ' + 
                 '\n--------------' +
                 '\n9. Back' +
                 '\n0. Exit');
@@ -58,22 +53,11 @@ let args = {
 
 menu.state('premiership', {
     run: () => {
-        // use menu.con() to send response without terminating session    
-        formatReply(LEAGUE_ID_PREMIERSHIP_LEAGUE).then(function(result) {
-            var resultArray = result.api.fixtures;
-            var stringreply = getLoopItems(resultArray);
-        
-            //build the msenu in here.with the stringreply.
-
-            menu.con('Premiership (EPL)' + 
-            '\n' +
-            stringreply+
+        // use menu.con() to send response without terminating session      
+        menu.con('Premiership (EPL) ' + 
+            '\n--------------' +
             '\n9. Back' +
             '\n0. Exit');
-        
-          });
-        
-       
     },
     // next object links to next state based on user input
     next: {
@@ -84,20 +68,11 @@ menu.state('premiership', {
 
 menu.state('la_liga', {
     run: () => {
-        // use menu.con() to send response without terminating session    
-        formatReply(LEAGUE_ID_LALIGA).then(function(result) {
-            var resultArray = result.api.fixtures;
-            var stringreply = getLoopItems(resultArray);
-        
-            //build the msenu in here.with the stringreply.
-
-            menu.con('La Liga ' + 
-            '\n' +
-            stringreply+
+        // use menu.con() to send response without terminating session      
+        menu.con('La liga ' + 
+            '\n--------------' +
             '\n9. Back' +
             '\n0. Exit');
-        
-          });
     },
     // next object links to next state based on user input
     next: {
@@ -109,19 +84,10 @@ menu.state('la_liga', {
 menu.state('serie_a', {
     run: () => {
         // use menu.con() to send response without terminating session      
-        formatReply(LEAGUE_ID_SERIES_A).then(function(result) {
-            var resultArray = result.api.fixtures;
-            var stringreply = getLoopItems(resultArray);
-        
-            //build the msenu in here.with the stringreply.
-
-            menu.con('Series A' + 
-            '\n' +
-            stringreply+
+        menu.con('Serie A ' + 
+            '\n--------------' +
             '\n9. Back' +
             '\n0. Exit');
-        
-          });
     },
     // next object links to next state based on user input
     next: {
@@ -142,20 +108,3 @@ menu.run(args, resMsg => {
         callback(null, resMsg);
     });
 };
-
-function formatReply(legueId) {
-
-    //gets the fixture object for api fesult
-    return  ussdFootball.fixtureByLegue(legueId).
-   then(ussdFootball.getApiItems)
-
-}   
-
-function getLoopItems(element) {
-    var retunString = '';
-    var i;
-     for (i=0;i<element.length;i++){
-          retunString += element[i].homeTeam.team_name+'('+element[i].goalsHomeTeam+') VS '+element[i].awayTeam.team_name+' ('+element[i].goalsAwayTeam+')\n';
-     } 
-       return retunString;
-    }
