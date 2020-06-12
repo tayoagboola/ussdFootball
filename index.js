@@ -13,7 +13,7 @@ let args = {
     let startState = {
         run: () => {
             // use menu.con() to send response without terminating session      
-            menu.con('Welcome to Live Scores powered by Bet9ja' + 
+            menu.con('Welcome to Live Scores powered by Benjamin ' + 
                 '\n--------------' +
                 '\n1. Live Score' +
                 '\n2. Premiership (EPL)' +
